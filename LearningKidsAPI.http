@@ -1,0 +1,83 @@
+@LearningKidsAPI_HostAddress = http://localhost:5125
+
+### 📋 USUARIOS
+GET {{LearningKidsAPI_HostAddress}}/api/usuarios
+Accept: application/json
+
+###
+
+GET {{LearningKidsAPI_HostAddress}}/api/usuarios/1
+Accept: application/json
+
+###
+
+POST {{LearningKidsAPI_HostAddress}}/api/usuarios
+Content-Type: application/json
+
+{
+  "nombre": "Juan Pérez",
+  "username": "juanp",
+  "password": "password123",
+  "idRol": 1
+}
+
+###
+
+### 👨‍🎓 ALUMNOS
+GET {{LearningKidsAPI_HostAddress}}/api/alumnos
+Accept: application/json
+
+###
+
+GET {{LearningKidsAPI_HostAddress}}/api/alumnos/1
+Accept: application/json
+
+###
+
+### 👨‍🏫 DOCENTES
+GET {{LearningKidsAPI_HostAddress}}/api/docentes
+Accept: application/json
+
+###
+
+### 👨‍👩‍👧‍👦 TUTORES
+GET {{LearningKidsAPI_HostAddress}}/api/tutores
+Accept: application/json
+
+###
+
+### 📚 PROYECTOS
+GET {{LearningKidsAPI_HostAddress}}/api/proyectos
+Accept: application/json
+
+###
+
+### 📝 PRUEBAS
+GET {{LearningKidsAPI_HostAddress}}/api/pruebas
+Accept: application/json
+
+###
+
+### ❓ PREGUNTAS
+GET {{LearningKidsAPI_HostAddress}}/api/preguntas
+Accept: application/json
+
+###
+
+### ✅ RESPUESTAS
+GET {{LearningKidsAPI_HostAddress}}/api/respuestas
+Accept: application/json
+
+###
+
+### 📊 RESULTADOS
+GET {{LearningKidsAPI_HostAddress}}/api/resultados
+Accept: application/json
+
+###
+
+### 💬 CHAT HISTORIAL
+GET {{LearningKidsAPI_HostAddress}}/api/chathistorial
+Accept: application/json
+
+###
