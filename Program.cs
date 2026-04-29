@@ -1,4 +1,5 @@
 using LearningKidsAPI.Data;
+using LearningKidsAPI.Models;
 using LearningKidsAPI.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,6 +32,10 @@ builder.Services.AddScoped<DocenteService>();
 builder.Services.AddScoped<CampoFormativoService>();
 builder.Services.AddScoped<ResultadoService>();
 builder.Services.AddScoped<ChatHistorialService>();
+
+// Configurar Tutor de Matemáticas
+builder.Services.Configure<MathTutorOptions>(builder.Configuration.GetSection(MathTutorOptions.SectionName));
+builder.Services.AddHttpClient<MathTutorService>();
 
 var app = builder.Build();
 
