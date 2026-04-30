@@ -45,5 +45,44 @@ namespace LearningKidsAPI.Services
             _context.Usuarios.Remove(usuario);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<Usuario?> ValidateCredentialsAsync(string? username, string? password)
+        {
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            {
+                return null;
+            }
+
+            return await _context.Usuarios
+                .Include(u => u.Rol)
+                .FirstOrDefaultAsync(u => u.username == username && u.password == password);
+        }
+
+        public async Task<Usuario?> ValidateAlumnoCredentialsAsync(string? username, string? password)
+        {
+            var usuario = await ValidateCredentialsAsync(username, password);
+            if (usuario == null)
+            {
+                return null;
+            }
+
+            return IsRole(usuario, "Alumno") ? usuario : null;
+        }
+
+        public async Task<Usuario?> ValidateDocenteOrAdminCredentialsAsync(string? username, string? password)
+        {
+            var usuario = await ValidateCredentialsAsync(username, password);
+            if (usuario == null)
+            {
+                return null;
+            }
+
+            return IsRole(usuario, "Docente") || IsRole(usuario, "Administrador") ? usuario : null;
+        }
+
+        private static bool IsRole(Usuario usuario, string roleName)
+        {
+            return string.Equals(usuario.Rol?.nombre, roleName, StringComparison.OrdinalIgnoreCase);
+        }
     }
 }

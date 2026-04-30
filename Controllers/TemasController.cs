@@ -8,7 +8,6 @@ namespace LearningKidsAPI.Controllers
     [Route("api/[controller]")]
     public class TemasController : ControllerBase
     {
-        private const int AuthenticatedUserId = 1;
         private readonly TemaService _temaService;
         private readonly ProyectoService _proyectoService;
 
@@ -21,7 +20,7 @@ namespace LearningKidsAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var temas = await _temaService.GetAllAsync(AuthenticatedUserId);
+            var temas = await _temaService.GetAllAsync();
             return Ok(temas);
         }
 
@@ -34,11 +33,6 @@ namespace LearningKidsAPI.Controllers
                 return NotFound();
             }
 
-            if (tema.Proyecto?.creadoPor != AuthenticatedUserId)
-            {
-                return Unauthorized();
-            }
-
             return Ok(tema);
         }
 
@@ -49,11 +43,6 @@ namespace LearningKidsAPI.Controllers
             if (proyecto == null)
             {
                 return NotFound(new { Message = "Proyecto no encontrado." });
-            }
-
-            if (proyecto.creadoPor != AuthenticatedUserId)
-            {
-                return Unauthorized();
             }
 
             var created = await _temaService.CreateAsync(tema);
@@ -69,17 +58,12 @@ namespace LearningKidsAPI.Controllers
                 return NotFound();
             }
 
-            if (existing.Proyecto?.creadoPor != AuthenticatedUserId)
-            {
-                return Unauthorized();
-            }
-
             if (tema.idProyecto != existing.idProyecto)
             {
                 var proyecto = await _proyectoService.GetByIdAsync(tema.idProyecto ?? 0);
-                if (proyecto == null || proyecto.creadoPor != AuthenticatedUserId)
+                if (proyecto == null)
                 {
-                    return Unauthorized();
+                    return NotFound(new { Message = "Proyecto no encontrado." });
                 }
             }
 
@@ -98,11 +82,6 @@ namespace LearningKidsAPI.Controllers
             if (existing == null)
             {
                 return NotFound();
-            }
-
-            if (existing.Proyecto?.creadoPor != AuthenticatedUserId)
-            {
-                return Unauthorized();
             }
 
             await _temaService.DeleteAsync(existing);

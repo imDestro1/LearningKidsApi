@@ -1,6 +1,5 @@
 using LearningKidsAPI.Data;
 using LearningKidsAPI.Models;
-using LearningKidsAPI.DTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace LearningKidsAPI.Services
@@ -14,32 +13,20 @@ namespace LearningKidsAPI.Services
             _context = context;
         }
 
-        public async Task<List<DocenteAlumnoDTO>> GetAllAsync()
+        public async Task<List<DocenteAlumno>> GetAllAsync()
         {
             return await _context.DocenteAlumnos
-                .Select(da => new DocenteAlumnoDTO
-                {
-                    id = da.id,
-                    idDocente = da.idDocente,
-                    idAlumno = da.idAlumno,
-                    nombreDocente = null, // No acceder a navegación para evitar ciclos
-                    nombreAlumno = null   // No acceder a navegación para evitar ciclos
-                })
+                .Include(da => da.Docente)
+                .Include(da => da.Alumno)
                 .ToListAsync();
         }
 
-        public async Task<DocenteAlumnoDTO?> GetByIdAsync(int id)
+        public async Task<DocenteAlumno?> GetByIdAsync(int id)
         {
             return await _context.DocenteAlumnos
+                .Include(da => da.Docente)
+                .Include(da => da.Alumno)
                 .Where(da => da.id == id)
-                .Select(da => new DocenteAlumnoDTO
-                {
-                    id = da.id,
-                    idDocente = da.idDocente,
-                    idAlumno = da.idAlumno,
-                    nombreDocente = null, // No acceder a navegación para evitar ciclos
-                    nombreAlumno = null   // No acceder a navegación para evitar ciclos
-                })
                 .FirstOrDefaultAsync();
         }
 

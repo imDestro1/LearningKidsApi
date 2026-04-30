@@ -8,7 +8,6 @@ namespace LearningKidsAPI.Controllers
     [Route("api/[controller]")]
     public class PruebasController : ControllerBase
     {
-        private const int AuthenticatedUserId = 1;
         private readonly PruebaService _pruebaService;
         private readonly TemaService _temaService;
 
@@ -21,7 +20,7 @@ namespace LearningKidsAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var pruebas = await _pruebaService.GetAllAsync(AuthenticatedUserId);
+            var pruebas = await _pruebaService.GetAllAsync();
             return Ok(pruebas);
         }
 
@@ -32,11 +31,6 @@ namespace LearningKidsAPI.Controllers
             if (prueba == null)
             {
                 return NotFound();
-            }
-
-            if (prueba.creadoPor != AuthenticatedUserId)
-            {
-                return Unauthorized();
             }
 
             return Ok(prueba);
@@ -51,12 +45,6 @@ namespace LearningKidsAPI.Controllers
                 return NotFound(new { Message = "Tema no encontrado." });
             }
 
-            if (tema.Proyecto?.creadoPor != AuthenticatedUserId)
-            {
-                return Unauthorized();
-            }
-
-            prueba.creadoPor = AuthenticatedUserId;
             var created = await _pruebaService.CreateAsync(prueba);
             return CreatedAtAction(nameof(Get), new { id = created.idPrueba }, created);
         }
@@ -70,22 +58,18 @@ namespace LearningKidsAPI.Controllers
                 return NotFound();
             }
 
-            if (existing.creadoPor != AuthenticatedUserId)
-            {
-                return Unauthorized();
-            }
-
             if (prueba.idTema != existing.idTema)
             {
                 var tema = await _temaService.GetByIdAsync(prueba.idTema ?? 0);
-                if (tema == null || tema.Proyecto?.creadoPor != AuthenticatedUserId)
+                if (tema == null)
                 {
-                    return Unauthorized();
+                    return NotFound(new { Message = "Tema no encontrado." });
                 }
             }
 
             existing.titulo = prueba.titulo;
             existing.idTema = prueba.idTema;
+            existing.creadoPor = prueba.creadoPor;
             await _pruebaService.UpdateAsync(existing);
 
             return Ok(existing);
@@ -98,11 +82,6 @@ namespace LearningKidsAPI.Controllers
             if (existing == null)
             {
                 return NotFound();
-            }
-
-            if (existing.creadoPor != AuthenticatedUserId)
-            {
-                return Unauthorized();
             }
 
             await _pruebaService.DeleteAsync(existing);

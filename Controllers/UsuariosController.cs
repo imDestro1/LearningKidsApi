@@ -1,5 +1,6 @@
 using LearningKidsAPI.Models;
 using LearningKidsAPI.Services;
+using LearningKidsAPI.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LearningKidsAPI.Controllers
@@ -68,6 +69,40 @@ namespace LearningKidsAPI.Controllers
 
             await _usuarioService.DeleteAsync(existing);
             return Ok();
+        }
+
+        [HttpPost("login/alumnos")]
+        public async Task<IActionResult> LoginAlumnos([FromBody] LoginRequest loginRequest)
+        {
+            if (loginRequest == null || string.IsNullOrEmpty(loginRequest.username) || string.IsNullOrEmpty(loginRequest.password))
+            {
+                return BadRequest(new { Message = "Usuario y contraseña son requeridos." });
+            }
+
+            var usuario = await _usuarioService.ValidateAlumnoCredentialsAsync(loginRequest.username, loginRequest.password);
+            if (usuario == null)
+            {
+                return Unauthorized(new { Message = "Credenciales inválidas para acceso de alumno." });
+            }
+
+            return Ok(new { Message = "Login de alumno exitoso.", usuario });
+        }
+
+        [HttpPost("login/staff")]
+        public async Task<IActionResult> LoginStaff([FromBody] LoginRequest loginRequest)
+        {
+            if (loginRequest == null || string.IsNullOrEmpty(loginRequest.username) || string.IsNullOrEmpty(loginRequest.password))
+            {
+                return BadRequest(new { Message = "Usuario y contraseña son requeridos." });
+            }
+
+            var usuario = await _usuarioService.ValidateDocenteOrAdminCredentialsAsync(loginRequest.username, loginRequest.password);
+            if (usuario == null)
+            {
+                return Unauthorized(new { Message = "Credenciales inválidas para acceso de docentes/administradores." });
+            }
+
+            return Ok(new { Message = "Login de staff exitoso.", usuario });
         }
     }
 }

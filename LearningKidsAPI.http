@@ -23,6 +23,39 @@ Content-Type: application/json
 
 ###
 
+### LOGIN ALUMNO
+POST {{LearningKidsAPI_HostAddress}}/api/usuarios/login/alumnos
+Content-Type: application/json
+
+{
+  "username": "alumno1",
+  "password": "password123"
+}
+
+###
+
+### LOGIN STAFF (DOCENTE/ADMIN)
+POST {{LearningKidsAPI_HostAddress}}/api/usuarios/login/staff
+Content-Type: application/json
+
+{
+  "username": "docente1",
+  "password": "password123"
+}
+
+###
+
+### LOGIN STAFF INVALIDO
+POST {{LearningKidsAPI_HostAddress}}/api/usuarios/login/staff
+Content-Type: application/json
+
+{
+  "username": "alumno1",
+  "password": "password123"
+}
+
+###
+
 ### 👨‍🎓 ALUMNOS
 GET {{LearningKidsAPI_HostAddress}}/api/alumnos
 Accept: application/json

@@ -13,13 +13,12 @@ namespace LearningKidsAPI.Services
             _context = context;
         }
 
-        public async Task<List<Proyecto>> GetAllAsync(int usuarioId)
+        public async Task<List<Proyecto>> GetAllAsync()
         {
             return await _context.Proyectos
                 .Include(p => p.Temas)
                 .Include(p => p.CampoFormativo)
                 .Include(p => p.Usuario)
-                .Where(p => p.creadoPor == usuarioId)
                 .ToListAsync();
         }
 

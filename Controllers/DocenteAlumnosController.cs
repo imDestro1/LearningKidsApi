@@ -1,6 +1,5 @@
 using LearningKidsAPI.Models;
 using LearningKidsAPI.Services;
-using LearningKidsAPI.DTOs;
 using LearningKidsAPI.Data;
 using Microsoft.AspNetCore.Mvc;
 
@@ -49,8 +48,8 @@ namespace LearningKidsAPI.Controllers
         public async Task<IActionResult> Put(int id, [FromBody] DocenteAlumno docenteAlumno)
         {
             // Verificar si existe
-            var existingDto = await _docenteAlumnoService.GetByIdAsync(id);
-            if (existingDto == null)
+            var existing = await _docenteAlumnoService.GetByIdAsync(id);
+            if (existing == null)
             {
                 return NotFound();
             }
@@ -65,8 +64,8 @@ namespace LearningKidsAPI.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             // Verificar si existe
-            var existingDto = await _docenteAlumnoService.GetByIdAsync(id);
-            if (existingDto == null)
+            var existing = await _docenteAlumnoService.GetByIdAsync(id);
+            if (existing == null)
             {
                 return NotFound();
             }

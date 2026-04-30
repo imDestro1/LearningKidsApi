@@ -50,10 +50,13 @@ namespace LearningKidsAPI.Controllers
                 return NotFound();
             }
 
-            tutor.idTutor = id;
-            await _tutorService.UpdateAsync(tutor);
+            // 🔥 actualizar SOLO campos necesarios
+            existing.nombre = tutor.nombre;
+            existing.correo = tutor.correo;
 
-            return Ok(tutor);
+            await _tutorService.UpdateAsync(existing);
+
+            return Ok(existing);
         }
 
         [HttpDelete("{id:int}")]

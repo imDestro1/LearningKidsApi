@@ -1,5 +1,4 @@
 using LearningKidsAPI.Data;
-using LearningKidsAPI.DTOs;
 using LearningKidsAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,37 +14,21 @@ namespace LearningKidsAPI.Services
             _context = context;
         }
 
-        public async Task<List<DocenteDTO>> GetAllAsync()
+        public async Task<List<Usuario>> GetAllAsync()
         {
             var docenteRoleId = await GetDocenteRoleIdAsync();
             return await _context.Usuarios
                 .Include(u => u.Rol)
                 .Where(u => u.idRol == docenteRoleId)
-                .Select(u => new DocenteDTO
-                {
-                    idUsuario = u.idUsuario,
-                    nombre = u.nombre,
-                    username = u.username,
-                    idRol = u.idRol,
-                    rolNombre = u.Rol != null ? u.Rol.nombre : null
-                })
                 .ToListAsync();
         }
 
-        public async Task<DocenteDTO?> GetByIdAsync(int id)
+        public async Task<Usuario?> GetByIdAsync(int id)
         {
             var docenteRoleId = await GetDocenteRoleIdAsync();
             return await _context.Usuarios
                 .Include(u => u.Rol)
                 .Where(u => u.idUsuario == id && u.idRol == docenteRoleId)
-                .Select(u => new DocenteDTO
-                {
-                    idUsuario = u.idUsuario,
-                    nombre = u.nombre,
-                    username = u.username,
-                    idRol = u.idRol,
-                    rolNombre = u.Rol != null ? u.Rol.nombre : null
-                })
                 .FirstOrDefaultAsync();
         }
 
