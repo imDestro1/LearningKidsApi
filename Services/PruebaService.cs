@@ -18,6 +18,7 @@ namespace LearningKidsAPI.Services
             return await _context.Pruebas
                 .Include(p => p.Tema)
                 .Include(p => p.Preguntas)
+                    .ThenInclude(q => q.Respuestas)
                 .Include(p => p.Usuario)
                 .ToListAsync();
         }
@@ -27,6 +28,7 @@ namespace LearningKidsAPI.Services
             return await _context.Pruebas
                 .Include(p => p.Tema)
                 .Include(p => p.Preguntas)
+                    .ThenInclude(q => q.Respuestas)
                 .Include(p => p.Usuario)
                 .FirstOrDefaultAsync(p => p.idPrueba == id);
         }
