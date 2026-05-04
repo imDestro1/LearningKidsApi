@@ -37,6 +37,16 @@ builder.Services.AddScoped<ChatHistorialService>();
 builder.Services.Configure<MathTutorOptions>(builder.Configuration.GetSection(MathTutorOptions.SectionName));
 builder.Services.AddHttpClient<MathTutorService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
 // Configurar OpenAPI/Swagger
@@ -47,6 +57,7 @@ if (app.Environment.IsDevelopment())
 
 // Middleware
 app.UseHttpsRedirection();
+app.UseCors();
 
 // Mapear controllers
 app.MapControllers();
