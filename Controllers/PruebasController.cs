@@ -21,7 +21,7 @@ namespace LearningKidsAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var pruebas = await _pruebaService.GetAllAsync(AuthenticatedUserId);
+            var pruebas = await _pruebaService.GetAllAsync(0);
             return Ok(pruebas);
         }
 
@@ -32,11 +32,6 @@ namespace LearningKidsAPI.Controllers
             if (prueba == null)
             {
                 return NotFound();
-            }
-
-            if (prueba.creadoPor != AuthenticatedUserId)
-            {
-                return Unauthorized();
             }
 
             return Ok(prueba);

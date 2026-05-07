@@ -19,7 +19,7 @@ namespace LearningKidsAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var proyectos = await _proyectoService.GetAllAsync(AuthenticatedUserId);
+            var proyectos = await _proyectoService.GetAllAsync(0);
             return Ok(proyectos);
         }
 
@@ -30,11 +30,6 @@ namespace LearningKidsAPI.Controllers
             if (proyecto == null)
             {
                 return NotFound();
-            }
-
-            if (proyecto.creadoPor != AuthenticatedUserId)
-            {
-                return Unauthorized();
             }
 
             return Ok(proyecto);

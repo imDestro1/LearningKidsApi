@@ -15,6 +15,14 @@ namespace LearningKidsAPI.Services
 
         public async Task<List<Tema>> GetAllAsync(int usuarioId)
         {
+            if (usuarioId <= 0)
+            {
+                return await _context.Temas
+                    .Include(t => t.Proyecto)
+                    .Include(t => t.Pruebas)
+                    .ToListAsync();
+            }
+
             return await _context.Temas
                 .Include(t => t.Proyecto)
                 .Include(t => t.Pruebas)

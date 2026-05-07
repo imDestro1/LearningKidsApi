@@ -21,7 +21,7 @@ namespace LearningKidsAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var temas = await _temaService.GetAllAsync(AuthenticatedUserId);
+            var temas = await _temaService.GetAllAsync(0);
             return Ok(temas);
         }
 
@@ -32,11 +32,6 @@ namespace LearningKidsAPI.Controllers
             if (tema == null)
             {
                 return NotFound();
-            }
-
-            if (tema.Proyecto?.creadoPor != AuthenticatedUserId)
-            {
-                return Unauthorized();
             }
 
             return Ok(tema);
