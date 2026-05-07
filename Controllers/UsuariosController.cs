@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LearningKidsAPI.Controllers
 {
+    public record LoginAlumnoRequest(string? username, string? password);
+
     [ApiController]
     [Route("api/[controller]")]
     public class UsuariosController : ControllerBase
@@ -72,6 +74,7 @@ namespace LearningKidsAPI.Controllers
         }
 
         [HttpPost("login/alumnos")]
+<<<<<<< HEAD
         public async Task<IActionResult> LoginAlumnos([FromBody] LoginRequest loginRequest)
         {
             if (loginRequest == null || string.IsNullOrEmpty(loginRequest.username) || string.IsNullOrEmpty(loginRequest.password))
@@ -103,6 +106,35 @@ namespace LearningKidsAPI.Controllers
             }
 
             return Ok(new { Message = "Login de staff exitoso.", usuario });
+=======
+        public async Task<IActionResult> LoginAlumnos([FromBody] LoginAlumnoRequest request)
+        {
+            var username = request.username?.Trim() ?? string.Empty;
+            var password = request.password?.Trim() ?? string.Empty;
+
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            {
+                return BadRequest(new { message = "Ingresa tu username y tu contraseña." });
+            }
+
+            var usuario = await _usuarioService.LoginAlumnoAsync(username, password);
+            if (usuario == null)
+            {
+                return Unauthorized(new { message = "Usuario o contraseña incorrectos." });
+            }
+
+            return Ok(new
+            {
+                message = "Inicio de sesión exitoso.",
+                usuario = new
+                {
+                    usuario.idUsuario,
+                    usuario.nombre,
+                    usuario.username,
+                    usuario.idRol
+                }
+            });
+>>>>>>> origin/featureAI
         }
     }
 }

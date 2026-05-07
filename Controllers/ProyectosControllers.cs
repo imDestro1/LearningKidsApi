@@ -18,7 +18,11 @@ namespace LearningKidsAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
+<<<<<<< HEAD
             var proyectos = await _proyectoService.GetAllAsync();
+=======
+            var proyectos = await _proyectoService.GetAllAsync(0);
+>>>>>>> origin/featureAI
             return Ok(proyectos);
         }
 

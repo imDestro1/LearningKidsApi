@@ -1,0 +1,28 @@
+# Visual Studio
+.vs/
+.vscode/
+bin/
+obj/
+*.user
+*.suo
+
+# Archivos de entorno (NO commitar variables sensibles)
+.env
+.env.local
+.env.*.local
+
+# IDE
+*.swp
+*.swo
+*~
+.DS_Store
+
+# NuGet
+.nuget/
+
+# Logs
+logs/
+*.log
+
+# Configuración local sensible
+appsettings.Local.json

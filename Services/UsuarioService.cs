@@ -46,6 +46,7 @@ namespace LearningKidsAPI.Services
             await _context.SaveChangesAsync();
         }
 
+<<<<<<< HEAD
         public async Task<Usuario?> ValidateCredentialsAsync(string? username, string? password)
         {
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
@@ -83,6 +84,19 @@ namespace LearningKidsAPI.Services
         private static bool IsRole(Usuario usuario, string roleName)
         {
             return string.Equals(usuario.Rol?.nombre, roleName, StringComparison.OrdinalIgnoreCase);
+=======
+        public async Task<Usuario?> LoginAlumnoAsync(string username, string password)
+        {
+            var cleanUsername = username.Trim();
+            var cleanPassword = password.Trim();
+
+            return await _context.Usuarios
+                .Include(u => u.Rol)
+                .Where(u => u.username != null && u.password != null)
+                .Where(u => u.username == cleanUsername && u.password == cleanPassword)
+                .Where(u => _context.Alumnos.Any(a => a.idAlumno == u.idUsuario))
+                .FirstOrDefaultAsync();
+>>>>>>> origin/featureAI
         }
     }
 }
