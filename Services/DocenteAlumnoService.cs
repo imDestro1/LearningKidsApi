@@ -43,6 +43,42 @@ namespace LearningKidsAPI.Services
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<DocenteAlumnosDetalleDTO?> GetByDocenteIdAsync(int idDocente)
+        {
+            var relaciones = await _context.DocenteAlumnos
+                .Include(da => da.Docente)
+                .Include(da => da.Alumno)
+                .ThenInclude(a => a!.Usuario)
+                .Where(da => da.idDocente == idDocente)
+                .ToListAsync();
+
+            if (!relaciones.Any())
+            {
+                return null;
+            }
+
+            var docente = relaciones
+                .Select(da => da.Docente)
+                .FirstOrDefault(d => d != null);
+
+            return new DocenteAlumnosDetalleDTO
+            {
+                idDocente = idDocente,
+                nombreDocente = docente?.nombre,
+                usernameDocente = docente?.username,
+                alumnos = relaciones
+                    .Where(da => da.Alumno != null)
+                    .Select(da => new AlumnoResumenDTO
+                    {
+                        idAlumno = da.Alumno!.idAlumno,
+                        nombreAlumno = da.Alumno.Usuario?.nombre,
+                        usernameAlumno = da.Alumno.Usuario?.username,
+                        grado = da.Alumno.grado
+                    })
+                    .ToList()
+            };
+        }
+
         public async Task<DocenteAlumno> CreateAsync(DocenteAlumno docenteAlumno)
         {
             _context.DocenteAlumnos.Add(docenteAlumno);

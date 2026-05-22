@@ -34,6 +34,19 @@ Accept: application/json
 
 ###
 
+POST {{LearningKidsAPI_HostAddress}}/api/alumnos/registro
+Content-Type: application/json
+
+{
+  "nombre": "Alumno Demo",
+  "username": "alumno.demo",
+  "password": "password123",
+  "idTutor": null,
+  "grado": 3
+}
+
+###
+
 ### 👨‍🏫 DOCENTES
 GET {{LearningKidsAPI_HostAddress}}/api/docentes
 Accept: application/json

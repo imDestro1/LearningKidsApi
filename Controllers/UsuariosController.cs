@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LearningKidsAPI.Controllers
 {
-    public record LoginAlumnoRequest(string? username, string? password);
+    public record LoginRequest(string? username, string? password);
 
     [ApiController]
     [Route("api/[controller]")]
@@ -73,7 +73,7 @@ namespace LearningKidsAPI.Controllers
         }
 
         [HttpPost("login/alumnos")]
-        public async Task<IActionResult> LoginAlumnos([FromBody] LoginAlumnoRequest request)
+        public async Task<IActionResult> LoginAlumnos([FromBody] LoginRequest request)
         {
             var username = request.username?.Trim() ?? string.Empty;
             var password = request.password?.Trim() ?? string.Empty;
@@ -97,7 +97,39 @@ namespace LearningKidsAPI.Controllers
                     usuario.idUsuario,
                     usuario.nombre,
                     usuario.username,
-                    usuario.idRol
+                    usuario.idRol,
+                    rolNombre = usuario.Rol?.nombre
+                }
+            });
+        }
+
+        [HttpPost("login/personal")]
+        public async Task<IActionResult> LoginPersonal([FromBody] LoginRequest request)
+        {
+            var username = request.username?.Trim() ?? string.Empty;
+            var password = request.password?.Trim() ?? string.Empty;
+
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            {
+                return BadRequest(new { message = "Ingresa tu username y tu contraseña." });
+            }
+
+            var usuario = await _usuarioService.LoginPersonalAsync(username, password);
+            if (usuario == null)
+            {
+                return Unauthorized(new { message = "Usuario o contraseña incorrectos." });
+            }
+
+            return Ok(new
+            {
+                message = "Inicio de sesión exitoso.",
+                usuario = new
+                {
+                    usuario.idUsuario,
+                    usuario.nombre,
+                    usuario.username,
+                    usuario.idRol,
+                    rolNombre = usuario.Rol?.nombre
                 }
             });
         }

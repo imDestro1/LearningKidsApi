@@ -29,13 +29,13 @@ namespace LearningKidsAPI.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(int id)
         {
-            var docenteAlumno = await _docenteAlumnoService.GetByIdAsync(id);
-            if (docenteAlumno == null)
+            var docenteConAlumnos = await _docenteAlumnoService.GetByDocenteIdAsync(id);
+            if (docenteConAlumnos == null)
             {
                 return NotFound();
             }
 
-            return Ok(docenteAlumno);
+            return Ok(docenteConAlumnos);
         }
 
         [HttpPost]

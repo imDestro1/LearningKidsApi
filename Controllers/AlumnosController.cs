@@ -1,3 +1,4 @@
+using LearningKidsAPI.DTOs;
 using LearningKidsAPI.Models;
 using LearningKidsAPI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -39,6 +40,40 @@ namespace LearningKidsAPI.Controllers
         {
             var created = await _alumnoService.CreateAsync(alumno);
             return CreatedAtAction(nameof(Get), new { id = created.idAlumno }, created);
+        }
+
+        [HttpPost("registro")]
+        public async Task<IActionResult> Registrar([FromBody] AlumnoRegistroDTO registro)
+        {
+            if (string.IsNullOrWhiteSpace(registro.nombre))
+            {
+                return BadRequest(new { message = "El nombre es obligatorio." });
+            }
+
+            if (string.IsNullOrWhiteSpace(registro.username))
+            {
+                return BadRequest(new { message = "El username es obligatorio." });
+            }
+
+            if (string.IsNullOrWhiteSpace(registro.password))
+            {
+                return BadRequest(new { message = "La password es obligatoria." });
+            }
+
+            if (registro.grado.HasValue && (registro.grado < 1 || registro.grado > 6))
+            {
+                return BadRequest(new { message = "El grado debe estar entre 1 y 6." });
+            }
+
+            try
+            {
+                var created = await _alumnoService.RegisterAsync(registro);
+                return CreatedAtAction(nameof(Get), new { id = created.idAlumno }, created);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpPut("{id:int}")]
