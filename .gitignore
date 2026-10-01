@@ -26,3 +26,6 @@ logs/
 
 # Configuración local sensible
 appsettings.Local.json
+
+# Salida de dotnet publish (contiene configuración con secretos)
+publish/
