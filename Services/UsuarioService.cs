@@ -45,5 +45,18 @@ namespace LearningKidsAPI.Services
             _context.Usuarios.Remove(usuario);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<Usuario?> LoginAlumnoAsync(string username, string password)
+        {
+            var cleanUsername = username.Trim();
+            var cleanPassword = password.Trim();
+
+            return await _context.Usuarios
+                .Include(u => u.Rol)
+                .Where(u => u.username != null && u.password != null)
+                .Where(u => u.username == cleanUsername && u.password == cleanPassword)
+                .Where(u => _context.Alumnos.Any(a => a.idAlumno == u.idUsuario))
+                .FirstOrDefaultAsync();
+        }
     }
 }
